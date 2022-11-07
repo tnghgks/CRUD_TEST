@@ -38,6 +38,7 @@
       <button type="button" id="상품업데이트">상품업데이트</button>
     </main>
     <script>
+      // 상품 불러오기 핸들러
       const handleLoad = (event) => {
         fetch("http://localhost:3001/product", {
           method: "GET",
@@ -56,7 +57,7 @@
               $price.innerText = i.price;
               $price.style.textAlign = "center";
               $deleteBtn.textContent = "삭제";
-              $deleteBtn.addEventListener("click", handleDelete);
+              $deleteBtn.addEventListener("click", handleDelete); //Delete
               $option.setAttribute("value", i.id);
               $option.textContent = i.productName;
 
@@ -69,6 +70,7 @@
             }
           });
       };
+      // 업데이트할 상품 선택 핸들러
       const handleSelector = (event) => {
         const id = event.target.value;
         fetch(`http://localhost:3001/product?id=${id}`, {
@@ -83,7 +85,7 @@
             document.querySelector("#productpubdate").value = data[0].pubDate;
           });
       };
-
+      // 업로드 상품  핸들러
       const handleUpload = (event) => {
         // console.log("눌렀다.");
 
@@ -117,16 +119,7 @@
             document.body.appendChild($container);
           });
       };
-
-      // delete
-      const handleDelete = (event) => {
-        const id = event.currentTarget.closest("section").dataset.id;
-
-        fetch(`http://localhost:3001/product/${id}`, {
-          method: "DELETE",
-        });
-      };
-
+      // 상품 업데이트 핸들러
       const handleUpdate = (event) => {
         // console.log("눌렀다.");
         const id = document.querySelector("#productId").value;
@@ -143,6 +136,16 @@
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(productInfo),
+        });
+      };
+
+      // 상품 삭제 핸들러
+      const handleDelete = (event) => {
+        // 이벤트의 현재 타겟의 자신 포함 부모방향으로 CSS선택자(section)로 탐색해서 dataset 어트리뷰트 가져오기
+        const id = event.currentTarget.closest("section").dataset.id;
+
+        fetch(`http://localhost:3001/product/${id}`, {
+          method: "DELETE",
         });
       };
 
