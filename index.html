@@ -6,36 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>제코베 스토어 관리자 페이지</title>
     <link rel="stylesheet" href="https://unpkg.com/mvp.css@1.12/mvp.css" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <main>
-      <button id="상품불러오기">상품불러오기</button>
+      <header>
+        <button id="상품불러오기">상품불러오기</button>
+      </header>
+      <form class="productFome">
+        <label for="productname" required>상품이름</label>
+        <input id="productname" type="text" />
 
-      <label for="selectProduct">업데이트할 상품을 고르세요.</label>
-      <select name="selectProduct" id="selectProduct">
-        <option value="">--Please choose an option--</option>
-      </select>
+        <label for="productprice">제품가격</label>
+        <input id="productprice" type="number" />
 
-      <input id="productId" type="hidden" />
+        <label for="productpubdate">출시날짜</label>
+        <input id="productpubdate" type="date" />
 
-      <br /><br />
-      <label for="productname">상품이름</label>
-      <input id="productname" type="text" />
-
-      <br /><br />
-      <label for="productprice">제품가격</label>
-      <input id="productprice" type="number" />
-
-      <br /><br />
-      <label for="productpubdate">출시날짜</label>
-      <input id="productpubdate" type="date" />
-
-      <br /><br />
-      <label for="productstock">재고</label>
-      <input id="productstock" type="number" />
-
-      <button type="button" id="상품등록하기">상품등록하기</button>
-      <button type="button" id="상품업데이트">상품업데이트</button>
+        <label for="productstock">재고</label>
+        <input id="productstock" type="number" />
+        <button id="상품등록하기">상품등록하기</button>
+      </form>
+      <article class="productList"></article>
     </main>
     <script>
       // 상품 불러오기 핸들러
@@ -47,29 +39,66 @@
           .then((data) => {
             for (i of data) {
               const $container = document.createElement("section");
-              const $option = document.createElement("option");
               const $productName = document.createElement("h2");
               const $price = document.createElement("p");
+              const $div = document.createElement("div");
               const $deleteBtn = document.createElement("button");
+              const $modifyBtn = document.createElement("button");
 
-              $container.setAttribute("data-id", i.id);
+              $container.classList.add("product");
               $productName.innerText = i.productName;
               $price.innerText = i.price;
-              $price.style.textAlign = "center";
               $deleteBtn.textContent = "삭제";
-              $deleteBtn.addEventListener("click", handleDelete); //Delete
-              $option.setAttribute("value", i.id);
-              $option.textContent = i.productName;
+              $modifyBtn.textContent = "수정";
+              $div.classList.add("btns");
+              $container.setAttribute("data-id", i.id);
+
+              $div.appendChild($deleteBtn);
+              $div.appendChild($modifyBtn);
 
               $container.appendChild($productName);
               $container.appendChild($price);
-              $container.appendChild($deleteBtn);
-              $productSelector.appendChild($option);
+              $container.appendChild($div);
 
-              document.body.appendChild($container);
+              $productList.appendChild($container);
+
+              $deleteBtn.addEventListener("click", () => handleDelete(i.id)); //Delete
+              $modifyBtn.addEventListener("click", handleModify); // update
             }
           });
       };
+
+      const handleModify = (event) => {
+        const $modifyBtn = event.currentTarget;
+        const $section = $modifyBtn.parentNode.parentNode;
+        const $h2 = $section.querySelector("h2");
+        const $p = $section.querySelector("p");
+        const $upateBtn = document.createElement("button");
+        const $h2Input = document.createElement("input");
+        const $pInput = document.createElement("input");
+
+        $h2.style.display = "none";
+        $p.style.display = "none";
+
+        $h2Input.classList.add("input-modify");
+        $pInput.classList.add("input-modify");
+
+        $h2Input.setAttribute("type", "text");
+        $pInput.setAttribute("type", "number");
+
+        $h2Input.value = $h2.textContent;
+        $pInput.value = $p.textContent;
+
+        $section.prepend($pInput);
+        $section.prepend($h2Input);
+
+        $upateBtn.textContent = "업데이트";
+        $modifyBtn.insertAdjacentElement("beforebegin", $upateBtn);
+        $modifyBtn.style.display = "none";
+
+        $upateBtn.addEventListener("click", handleUpdate);
+      };
+
       // 업데이트할 상품 선택 핸들러
       const handleSelector = (event) => {
         const id = event.target.value;
@@ -121,29 +150,29 @@
       };
       // 상품 업데이트 핸들러
       const handleUpdate = (event) => {
-        // console.log("눌렀다.");
-        const id = document.querySelector("#productId").value;
+        const $updateBtn = event.currentTarget;
+        const $section = $updateBtn.parentNode.parentNode;
+        const $nameInput = $section.querySelector("input");
+        const $priceInput = $nameInput.nextSibling;
+        console.log($priceInput);
+        const id = $section.dataset.id;
+        const now = new Date();
+
         const productInfo = {
-          productName: document.querySelector("#productname").value,
-          price: document.querySelector("#productprice").value,
-          stockCount: document.querySelector("#productstock").value,
-          viewCount: 0,
-          pubDate: document.querySelector("#productpubdate").value,
-          modDate: document.querySelector("#productpubdate").value,
+          productName: $nameInput.value,
+          price: $priceInput.value,
+          modDate: now.toISOString().split("T")[0],
         };
 
         fetch(`http://localhost:3001/product/${id}`, {
-          method: "PUT",
+          method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(productInfo),
         });
       };
 
       // 상품 삭제 핸들러
-      const handleDelete = (event) => {
-        // 이벤트의 현재 타겟의 자신 포함 부모방향으로 CSS선택자(section)로 탐색해서 dataset 어트리뷰트 가져오기
-        const id = event.currentTarget.closest("section").dataset.id;
-
+      const handleDelete = (id) => {
         fetch(`http://localhost:3001/product/${id}`, {
           method: "DELETE",
         });
@@ -151,18 +180,12 @@
 
       // Read
       const $btnLoad = document.querySelector("#상품불러오기");
-      const $productSelector = document.querySelector("#selectProduct");
-
+      const $productList = document.querySelector(".productList");
       $btnLoad.addEventListener("click", handleLoad);
-      $productSelector.addEventListener("input", handleSelector);
 
       //create
       const $btnRegister = document.querySelector("#상품등록하기");
       $btnRegister.addEventListener("click", handleUpload);
-
-      // update
-      const btnUpdate = document.querySelector("#상품업데이트");
-      btnUpdate.addEventListener("click", handleUpdate);
     </script>
   </body>
 </html>

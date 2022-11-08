@@ -1,35 +1,9 @@
 {
   "product": [
     {
-      "productName": "버그를 Java라 버그잡는 개리씨 키링 개발자키링 금속키링",
-      "price": "25000",
-      "stockCount": "100",
-      "viewCount": 0,
-      "pubDate": "2022-02-28",
-      "modDate": "2022-02-28",
-      "id": 1
-    },
-    {
-      "id": 2,
-      "productName": "우당탕탕 라이캣의 실험실 스티커 팩",
-      "price": 3500,
-      "stockCount": 1000,
-      "thumbnailImg": "asset/img/2/thumbnailImg.jpg",
-      "option": [],
-      "discountRate": 0,
-      "shippingFee": 1500,
-      "detailInfoImage": [
-        "asset/detail/2/detail1.png",
-        "asset/detail/2/detail2.png"
-      ],
-      "viewCount": 0,
-      "pubDate": "2022-02-28",
-      "modDate": "2022-02-28"
-    },
-    {
       "id": 3,
       "productName": "딥러닝 개발자 무릎 담요",
-      "price": 17500,
+      "price": "17000",
       "stockCount": 0,
       "thumbnailImg": "asset/img/3/thumbnailImg.jpg",
       "option": [],
@@ -42,7 +16,7 @@
       ],
       "viewCount": 0,
       "pubDate": "2022-02-28",
-      "modDate": "2022-02-28"
+      "modDate": "2022-11-08"
     },
     {
       "id": 4,
@@ -124,32 +98,6 @@
       "viewCount": 0,
       "pubDate": "2022-02-28",
       "modDate": "2022-02-28"
-    },
-    {
-      "id": 7,
-      "productName": "제주코딩베이스캠프 코딩 연습장 세트",
-      "price": 8000,
-      "stockCount": 1000,
-      "thumbnailImg": "asset/img/7/thumbnailImg.jpg",
-      "option": [],
-      "discountRate": 0,
-      "shippingFee": 1500,
-      "detailInfoImage": [
-        "asset/detail/7/detail1.png",
-        "asset/detail/7/detail2.png"
-      ],
-      "viewCount": 0,
-      "pubDate": "2022-02-28",
-      "modDate": "2022-02-28"
-    },
-    {
-      "productName": "버그를 Java라 버그잡는 개리씨 키링 개발자키링 금속키링",
-      "price": "25000",
-      "stockCount": "100",
-      "viewCount": 0,
-      "pubDate": "2022-02-28",
-      "modDate": "2022-02-28",
-      "id": 8
     }
   ]
 }
